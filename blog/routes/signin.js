@@ -1,6 +1,6 @@
 const express = require('express')
 const router = express.Router()
-//const sha1 = require('sha1')
+const sha1 = require('sha1')
 const checkNotLogin = require('../middlewares/check').checkNotLogin
 const UserModel = require('../models/users')
 // GET /signup 注册页
