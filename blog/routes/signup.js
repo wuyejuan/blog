@@ -7,7 +7,7 @@ const UserModel=require('../models/users')
 
 const checkNotLogin = require('../middlewares/check').checkNotLogin
 
-// GET /signup 注册页
+// GET /signup 注册页显示
 router.get('/', checkNotLogin, function (req, res, next) {
   res.render('signup')
 })
