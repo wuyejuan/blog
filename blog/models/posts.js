@@ -1,5 +1,6 @@
 const marked = require('marked')
 const Post = require('../lib/mongo').Post
+const CommentModel = require('./comments')
 
 // 将 post 的 content 从 markdown 转换成 html
 Post.plugin('contentToHtml', {
@@ -12,6 +13,25 @@ Post.plugin('contentToHtml', {
   afterFindOne: function (post) {
     if (post) {
       post.content = marked(post.content)
+    }
+    return post
+  }
+})
+Post.piugin('addCommentCount',{
+  afterFind:function(posts){
+    return Promise.all(posts.map(function (post) {
+      return CommentModel.getCommentsCount(post._id).then(function (commentsCount) {
+        post.commentsCount = commentsCount
+        return post
+      })
+    }))
+  },
+  afterFindOne:function(posts){
+    if (post) {
+      return CommentModel.getCommentsCount(post._id).then(function (count) {
+        post.commentsCount = count
+        return post
+      })
     }
     return post
   }
@@ -48,7 +68,7 @@ module.exports = {
       .exec()
   },
   // 通过文章 id 获取一篇原生文章（编辑文章）
-    getRawPostById: function getRawPostById (postId) {
+  getRawPostById: function getRawPostById (postId) {
     return Post
       .findOne({ _id: postId })
       .populate({ path: 'author', model: 'User' })
