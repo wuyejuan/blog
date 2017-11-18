@@ -17,7 +17,7 @@ Post.plugin('contentToHtml', {
     return post
   }
 })
-Post.piugin('addCommentCount',{
+Post.plugin('addCommentCount',{
   afterFind:function(posts){
     return Promise.all(posts.map(function (post) {
       return CommentModel.getCommentsCount(post._id).then(function (commentsCount) {
