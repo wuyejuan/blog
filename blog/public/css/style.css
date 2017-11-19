@@ -74,3 +74,11 @@ body {
   .post-content .tag.right a {
     color: #999;
   }
+
+
+  /* ---------- comment ---------- */
+.replyContent {
+  padding: 8px;
+  background-color: #eee;
+  color: #666 !important;
+}
