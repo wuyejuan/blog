@@ -1,0 +1,73 @@
+<div class="ui grid">
+  <div class="four wide column"></div>
+  <div class="eight wide column">
+    <div class="ui segment">
+      <div class="ui minimal comments">
+        <h3 class="ui dividing header">留言</h3>
+
+        <% comments.forEach(function (comment) { %>
+          <div class="comment">
+            <span class="avatar">
+              <img src="/img/<%= comment.author.avatar %>">
+            </span>
+            <div class="content">
+              <a class="author" href=" "><%= comment.author.name %></a>
+              <div class="metadata">
+                <span class="date"><%= comment.created_at %></span>
+              </div>
+              <div class="text"><%- comment.content %></div>
+
+              <% if(comment.commentId) { %>
+              <div class="text replyContent">
+                <a href="/posts?author=<%= comment.replyComments.author._id  %>"><%= comment.replyComments.author.name  %>:</a>
+                <%- comment.replyComments.content  %>
+              </div>
+              <% } %>
+
+              <% if (user) { %>
+                <div class="actions">
+                  <a class="reply">回复</a>
+
+                  <% if (comment.author._id && user._id.toString() === comment.author._id.toString()) { %>
+                    <a class="reply" href="/posts/<%= post._id %>/comment/<%= comment._id %>/remove">删除</a>
+                  <% } %>
+
+                </div>
+              <% } %>
+
+
+
+
+            </div>
+            <form class="ui reply form" method="post" action="/posts/<%= post._id %>/comment" hidden>
+              <div class="field">
+                <input name="commentId" value="<%= comment._id %>" hidden/>
+                <textarea name="content"></textarea>
+              </div>
+              <button class="ui submit icon button" type='submit'>回复留言</button>
+              <div class="ui submit icon button cancel">取消</div>
+            </form>
+          </div>
+        <% }) %>
+
+        <% if (user) { %>
+          <form class="ui reply form" method="post" action="/posts/<%= post._id %>/comment">
+            <div class="field">
+              <textarea name="content"></textarea>
+            </div>
+            <input type="submit" class="ui icon button" value="留言" />
+          </form>
+        <% } %>
+
+        <script type="text/javascript">
+          $('.content .actions a').first().click(function (e) {
+            $('.comment form').show(500)
+          })
+          $('.comment form .cancel').click(function (e) {
+            $('.comment form').hide(500)
+          })
+        </script>
+      </div>
+    </div>
+  </div>
+</div>
